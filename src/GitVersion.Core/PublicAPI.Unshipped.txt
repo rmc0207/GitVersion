@@ -1,0 +1,1 @@
+GitVersion.IGitRepository.TagsLookup.get -> System.Collections.Generic.ISet<string!>!

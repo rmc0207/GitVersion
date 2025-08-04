@@ -86,7 +86,7 @@ public class IncrementStrategyFinder : IIncrementStrategyFinder
         var commits = GetIntermediateCommits(repository, baseCommit, context.CurrentCommit);
 
         // consider commit messages since latest tag only (see #3071)
-        var tags = new HashSet<string?>(repository.Tags.Select(t => t.TargetSha));
+        var tags = repository.TagsLookup;
         commits = commits
             .Reverse()
             .TakeWhile(x => !tags.Contains(x.Sha))
