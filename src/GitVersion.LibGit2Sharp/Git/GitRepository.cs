@@ -215,7 +215,7 @@ internal sealed class GitRepository : IMutatingGitRepository
         new() { CredentialsProvider = GetCredentialsProvider(auth) };
 
     private static CloneOptions GetCloneOptions(AuthenticationInfo auth) =>
-        new() { Checkout = false, CredentialsProvider = GetCredentialsProvider(auth) };
+        new() { Checkout = false };
 
     private static CredentialsHandler? GetCredentialsProvider(AuthenticationInfo auth)
     {
