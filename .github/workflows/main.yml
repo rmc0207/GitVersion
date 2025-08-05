@@ -109,6 +109,7 @@ jobs:
               Compress-Archive -Path $_.FullName -DestinationPath "./${name}.zip" -CompressionLevel Fastest
             } else {
               Set-Location $_.FullName
+              chmod a+x ./gitversion
               [string[]] $files = Get-ChildItem -File | ForEach-Object { $_.Name }
               tar -czf "../${name}.tar.gz" $files
             }
