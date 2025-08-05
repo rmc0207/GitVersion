@@ -104,7 +104,14 @@ jobs:
       - name: Package artifacts
         run: |
           Get-ChildItem -Path . -Directory | ForEach-Object {
-            Compress-Archive -Path $_.FullName -DestinationPath "./$($_.Name).zip" -CompressionLevel Fastest
+            [string] $name = $_.Name
+            if ($name -match '-win-') {
+              Compress-Archive -Path $_.FullName -DestinationPath "./${name}.zip" -CompressionLevel Fastest
+            } else {
+              Set-Location $_.FullName
+              [string[]] $files = Get-ChildItem -File | ForEach-Object { $_.Name }
+              tar -czf "../${name}.tar.gz" $files
+            }
           }
 
       - name: Release
@@ -113,3 +120,4 @@ jobs:
           overwrite_files: true
           files: |
             *.zip
+            *.tar.gz
