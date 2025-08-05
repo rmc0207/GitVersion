@@ -10,6 +10,7 @@ internal sealed class GitRepository : IMutatingGitRepository
 {
     private readonly ILog log;
     private readonly Lazy<IRepository> repositoryLazy;
+    private HashSet<string> tagsLookup;
 
     public GitRepository(ILog log, IGitRepositoryInfo repositoryInfo)
         : this(log, () => repositoryInfo.GitRootPath)
@@ -40,6 +41,7 @@ internal sealed class GitRepository : IMutatingGitRepository
     public bool IsHeadDetached => RepositoryInstance.Info.IsHeadDetached;
     public IBranch Head => new Branch(RepositoryInstance.Head);
     public ITagCollection Tags => new TagCollection(RepositoryInstance.Tags);
+    public ISet<string> TagsLookup => tagsLookup ??= new HashSet<string>(Tags.Where(t => t.TargetSha != null).Select(t => t.TargetSha!));
     public IReferenceCollection Refs => new ReferenceCollection(RepositoryInstance.Refs);
     public IBranchCollection Branches => new BranchCollection(RepositoryInstance.Branches);
     public ICommitCollection Commits => new CommitCollection(RepositoryInstance.Commits);

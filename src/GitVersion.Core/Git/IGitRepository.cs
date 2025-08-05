@@ -7,6 +7,7 @@ public interface IGitRepository
     bool IsHeadDetached { get; }
     IBranch Head { get; }
     ITagCollection Tags { get; }
+    ISet<string> TagsLookup { get; }
     IReferenceCollection Refs { get; }
     IBranchCollection Branches { get; }
     ICommitCollection Commits { get; }
