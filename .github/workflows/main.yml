@@ -45,10 +45,11 @@ jobs:
       - name: Version
         id: version
         run: |
-          [string] $version = if ('${{ github.ref_type }}' -eq 'tag') {
-              '${{ github.ref }}' -replace '^refs/tags/'
-            } else { '0.0.1' }
+          [string] $version = '${{ github.ref_type }}' -eq 'tag' ? '${{ github.ref_name }}' : '0.0.1'
           "version=${version}" | Out-File -Path $env:GITHUB_OUTPUT -Append -Encoding ascii
+
+          [string] $configuration = '${{ github.ref_type }}' -eq 'tag' ? 'Release' : 'Debug'
+          "configuration=${configuration}" | Out-File -Path $env:GITHUB_OUTPUT -Append -Encoding ascii
 
       - name: Restore
         run:
@@ -57,21 +58,23 @@ jobs:
       - name: Build
         run: |
           dotnet build `
+            --configuration ${{ steps.version.outputs.configuration }} `
             --no-restore `
             -p:version=${{ steps.version.outputs.version }} `
             ./src/GitVersion.sln
 
-      # - name: Tests
-      #   run:
-      #     dotnet test `
-      #       --no-build `
-      #       -p:TestTfmsInParallel=false `
-      #       ./src/GitVersion.sln
+      - name: Tests
+        if: github.ref_type != 'tag'
+        run:
+          dotnet test `
+            --no-build `
+            -p:TestTfmsInParallel=false `
+            ./src/GitVersion.sln
 
       - name: Publish
         run:
           dotnet publish `
-            --configuration Release `
+            --configuration ${{ steps.version.outputs.configuration }} `
             --framework net6.0 `
             --runtime ${{ matrix.runtime }} `
             -p:version=${{ steps.version.outputs.version }} `
