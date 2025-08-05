@@ -25,11 +25,10 @@ public static class QuotedStringHelpers
         if (input == null)
             return Array.Empty<string>();
 
-        var split = new List<string>();
+        var result = new StringBuilder(input.Length);
+
         bool isPreviousCharBackslash = false;
         bool isInsideQuotes = false;
-
-        int startIndex = 0;
         for (int i = 0; i < input.Length; i++)
         {
             char current = input[i];
@@ -37,22 +36,26 @@ public static class QuotedStringHelpers
             {
                 case '"':
                     if (!isPreviousCharBackslash)
+                    {
                         isInsideQuotes = !isInsideQuotes;
+                    }
+                    result.Append(current);
                     break;
                 default:
                     if (current == splitChar && !isInsideQuotes)
                     {
-                        split.Add(input.Substring(startIndex, i - startIndex));
-                        startIndex = i + 1;
+                        result.Append('¿');
+                    }
+                    else
+                    {
+                        result.Append(current);
                     }
                     break;
             }
             isPreviousCharBackslash = current == '\\';
         }
 
-        split.Add(input.Substring(startIndex, input.Length - startIndex));
-
-        return split.Where(argument => !argument.IsNullOrEmpty()).ToArray();
+        return result.ToString().Split('¿', StringSplitOptions.RemoveEmptyEntries);
     }
 
     /// <summary>

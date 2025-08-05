@@ -68,7 +68,7 @@ public static class GitTestExtensions
         return commit;
     }
 
-    public static void ExecuteGitCmd(string gitCmd, Action<string>? writer = null)
+    public static void ExecuteGitCmd(string gitCmd, Action<string>? writer = null, string workingDirectory = ".")
     {
         var output = new StringBuilder();
         try
@@ -79,7 +79,7 @@ public static class GitTestExtensions
                 null,
                 "git",
                 gitCmd,
-                ".");
+                workingDirectory);
         }
         catch (FileNotFoundException exception)
         {

@@ -76,7 +76,7 @@ public class ExecCmdLineArgumentTest
         var executable = ExecutableHelper.GetExecutable();
 
         var output = new StringBuilder();
-        var args = ExecutableHelper.GetExecutableArgs($" /targetpath {workingDirectory} ");
+        var args = ExecutableHelper.GetExecutableArgs($" /targetpath \"{workingDirectory}\" ");
 
         var exitCode = ProcessHelper.Run(
             s => output.AppendLine(s),

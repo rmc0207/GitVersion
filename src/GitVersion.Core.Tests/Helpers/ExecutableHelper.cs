@@ -12,7 +12,7 @@ public static class ExecutableHelper
     {
         if (RuntimeHelper.IsCoreClr())
         {
-            args = $"{PathHelper.Combine(GetExeDirectory(), "gitversion.dll")} {args}";
+            args = $"\"{PathHelper.Combine(GetExeDirectory(), "gitversion.dll")}\" {args}";
         }
         return args;
     }

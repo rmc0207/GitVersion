@@ -102,9 +102,13 @@ public class ArgumentParser : IArgumentParser
             ? System.Environment.CurrentDirectory
             : firstArgument;
 
-        arguments.TargetPath = arguments.TargetPath.TrimEnd('/', '\\');
+        arguments.TargetPath = arguments.TargetPath.Trim('"').TrimEnd('/', '\\');
 
-        if (!arguments.EnsureAssemblyInfo) arguments.UpdateAssemblyInfoFileName = ResolveFiles(arguments.TargetPath, arguments.UpdateAssemblyInfoFileName).ToHashSet();
+        if (!arguments.EnsureAssemblyInfo)
+        {
+            arguments.UpdateAssemblyInfoFileName = ResolveFiles(arguments.TargetPath, arguments.UpdateAssemblyInfoFileName).ToHashSet();
+        }
+
         arguments.NoFetch = arguments.NoFetch || this.buildAgent.PreventFetch();
 
         return arguments;
